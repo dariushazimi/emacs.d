@@ -1,0 +1,520 @@
+#+STARTUP: overview
+
+* Interface tweaks
+Some general tips
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(add-to-list 'load-path "~/.emacs.d/loadpath")
+    (global-set-key (kbd "C-x o") 'ace-window)
+    Or maybe use a shorter key chord, since switching windows is a common task:
+
+    (global-set-key (kbd "M-p") 'ace-window)
+
+    (define-key global-map (kbd "C-<up>") 'windmove-up)
+    (define-key global-map (kbd "C-<down>") 'windmove-down)
+    (define-key global-map (kbd "C-<left>") 'windmove-left)
+    (define-key global-map (kbd "C-<right>") 'windmove-right)
+
+    Cx C + or - (font bigger or smaller) c + or -
+    full windows cx 0
+
+    Org mode 
+    Cc Cl create alink
+    Cc Co to open the link
+
+    revert-buffer (reload the same file)
+    eval-buffer
+    eval-last-sexp
+    ctrl h, k 
+    view-lossage (show history of yur commands)
+
+    alt x, ibuffer
+	    d to mark for delete and x to execute
+
+    C x 2 (splist horizontalwindows in 2)
+    c x 3 (split vertically)
+    C x 1 (goes back to one)
+
+    C x e to swtich windows
+    (for windowmove shift arrow to move between splits
+    or
+    C c arrow (winner mode)
+    Ace window:
+    - C x 0 and then the number
+    - to make the window the only one, use cx 1
+
+
+    --- 
+    Try a package
+    alt x try
+    lorem epsoum
+    if yuo dont know how to use it
+    alt x, describe-package
+    execute teh command in the help
+    now use the keys
+    super nice
+
+    alt q to make it formated paragraph
+    Text: to move around you can use Alt f / b to move back and forth word
+    or ctrl n p to move between lines
+
+    -Swiper
+    use space between words to wild cards
+    C c k (use ag to find text in files
+    C x l find directories
+
+
+    -avy
+    search by char, Alt s
+
+
+    Alt / dose auto complettion of the words you already used
+    c / to undo
+
+    
+
+    execute a python file
+    write a python script
+    C c C p (opens up a python shell)
+    C c C c (runs the progream down there)
+
+** Elpy enable
+    move cursor on top of any fuc tion and press
+    C c C d and it will bring up docs
+
+** Put a file into org mode
+    - M x org-mode
+    Cc Cx 0
+    Everytime now you type Cc Cx . it will put a timer there
+    Now if you want to place a timer there you press C c Cx .
+    Cc Cx , Comma to pause and Cc Cx comma to start again
+
+
+** Repeat the last command
+   
+ Cx z and after that just press z
+
+** Undo Tree
+
+ Cx u - undo tree
+
+** Emacs keyboard Macros
+
+    High Level Steps to Record and Play inside Emacs
+
+    Start recording a macro by pressing ctrl+x (
+    Perform any actions inside the Emacs editor that you would like to record.
+    Stop recording by pressing ctrl+x )
+    Play the last recorded macro by pressing ctrl+x e
+    For using multiple macros, you have to name and save the macros.
+
+    High Level Steps for Naming and Saving emacs macro, and playing it later
+ 
+    Press Ctrl+x Ctrl+k n
+    Give name-of-macro, and press ENTER
+    Run the named macro by pressing, M-x name-of-macro
+    
+
+
+use macaro https://www.mockaroo.com for generting data
+
+
+** Replace a rectangular selection with something like *
+C-xrt*SPACE RET
+
+** Numbering Lines and lists in Emacs
+
+    New command `C-x r N' (`rectangle-number-lines') numbers the lines in
+    the current rectangle.  With a prefix argument, this prompts for a
+    number to count from and for a format string.
+
+    This allows you to now number lines or lists easily instead of
+    using a macro or additional elisp functions.  Mark a vertical
+    region of text(using transient mark mode may help) 1 character
+    wide and then hit C-x r N and that's it.  It numbers the line.
+
+    if you use the prefix command C-u and do C-u C-x r N, it will
+    prompt you for a starting digit and the format string, so you can
+    start from 15, say.
+    
+    #+BEGIN_SRC emacs-lisp
+    (setq-default word-wrap t)
+    (setq inhibit-startup-message t)
+    (tool-bar-mode -1)
+
+    (fset 'yes-or-no-p 'y-or-n-p)
+    (global-set-key (kbd "<f5>") 'revert-buffer)
+
+
+    #+END_SRC
+
+
+
+
+
+    
+* Try
+#+BEGIN_SRC emacs-lisp
+(use-package try
+  :ensure t)
+(require 'linum-relative)
+#+END_SRC  
+ 
+* Which key
+ Brings up some help 
+    #+BEGIN_SRC emacs-lisp
+    (use-package which-key
+    :ensure t ;; Make sure it is installed
+    :config (which-key-mode)) ;; configure it after it is installed.
+
+     #+END_SRC  
+ Rest of stuff
+#+BEGIN_SRC emacs-lisp 
+;; Org-mode stuff
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+
+
+(defalias 'list-buffers 'ibuffer-other-window)
+
+;; (use-package tabbar
+;;:ensure t
+;;:config
+;;(tabbar-mode 1)
+(winner-mode 1)
+(windmove-default-keybindings)
+
+(use-package ace-window
+  :ensure t
+  :init
+  (progn
+    (global-set-key [remap other-window] 'ace-window)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+
+    ))
+
+
+(use-package swiper
+  :ensure t
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (global-set-key "\C-s" 'swiper)
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "<f6>") 'ivy-resume)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-find-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-c j") 'counsel-git-grep)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-x l") 'counsel-locate)
+    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+    (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+    ))
+
+
+;;(use-package evil
+;;  :init
+;;  (progn
+;;    ;; if we don't have this evil overwrites the cursor color
+;;    (setq evil-default-cursor t)
+;;    (evil-mode 1)
+;;    ))
+
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode 1)
+
+  (use-package evil-leader
+    :ensure t
+    :config
+    (global-evil-leader-mode))
+
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode))
+
+  (use-package evil-indent-textobject
+    :ensure t))
+
+(use-package avy
+  :ensure t
+  :bind ("M-s" . avy-goto-char)
+  :config
+  (setq avy-background t))
+
+
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    ))
+
+
+;;(use-package zenburn-theme
+;;  :ensure t
+;;  :config (load-theme 'zenburn t))
+
+(load-theme 'leuven t)
+(setq linum-format "%5d ")
+
+(setq-default left-fringe-width  5)
+
+;;(setq-default right-fringe-width  0)
+
+;;(set-face-attribute 'fringe nil :background "gray")
+(global-linum-mode t)
+
+
+#+END_SRC 
+
+* PowerLine
+#+BEGIN_SRC emacs-lisp
+
+;; Powerline
+(use-package powerline
+  :ensure t
+  :config (powerline-center-evil-theme))
+
+
+;; recent files
+(setq recentf-max-saved-items 256
+      recentf-max-menu-items 16)
+(recentf-mode)
+
+
+;; dired
+(setq dired-dwim-target t ; enable side-by-side dired buffer targets
+      dired-recursive-copies 'always ; better recursion in dired
+      dired-recursive-deletes 'top
+      dired-listing-switches "-lahp")
+#+END_SRC
+  
+
+* Evil bindings
+#+BEGIN_SRC emacs-lisp
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>")
+
+(evil-leader/set-key
+;;  "e" 'find-file
+  "e" 'helm-find-files
+  "r" 'helm-recentf
+  "b" 'switch-to-buffer
+  "k" 'kill-buffer) 
+
+(evil-leader/set-key "w" 'save-buffer)
+(evil-leader/set-key "q" 'kill-buffer-and-window)
+
+
+;; Map spc spc to helm M x
+;; there are  2 spaces
+
+
+(use-package use-package-chords
+  :ensure t
+  :config (key-chord-mode 1))
+
+(key-chord-define-global "  " 'helm-M-x)
+
+
+(use-package ace-jump-mode
+  :ensure t
+  :chords (("jj" . ace-jump-char-mode)
+           ("jk" . ace-jump-word-mode)
+           ("jl" . ace-jump-line-mode)))
+
+
+;; evil
+(use-package evil
+  :ensure t
+  :defines evil-disable-insert-state-bindings
+  :init
+  (setq evil-want-C-u-scroll t
+        evil-want-fine-undo 'no
+        evil-cross-lines t
+        evil-disable-insert-state-bindings t)
+  (define-key Info-mode-map "g" nil)
+  (evil-mode t)
+  :config
+  (add-hook 'git-commit-mode-hook 'evil-insert-state))
+
+(use-package evil-anzu
+:ensure t)
+
+(use-package evil-commentary
+  :ensure t
+  :diminish evil-commentary-mode
+  :config (evil-commentary-mode))
+
+(use-package evil-easymotion
+  :ensure t
+  :config (evilem-default-keybindings "<SPC>"))
+
+(use-package ediff
+  :ensure t
+  :defer t
+  :config (use-package evil-ediff))
+
+(use-package evil-escape
+  :diminish evil-escape-mode
+  :ensure t
+  :config
+  (evil-escape-mode))
+
+(use-package evil-matchit
+  :ensure t
+  :config (global-evil-matchit-mode))
+
+(use-package evil-snipe
+  :ensure t
+  :init (evil-snipe-mode))
+
+(use-package evil-surround
+  :ensure t
+  :config (global-evil-surround-mode))
+
+(use-package evil-visualstar
+  :ensure t
+  :init (global-evil-visualstar-mode))
+
+
+#+END_SRC
+
+* Helm 
+#+BEGIN_SRC emacs-lisp
+;; helm
+(use-package helm
+  :ensure t
+  :bind (("M-x" . helm-M-x)
+         ([f5] . helm-find-files)
+         ("M-f" . helm-find-files)
+         ([f10] . helm-buffers-list)
+         ([S-f10] . helm-recentf)))
+;; projectile
+(use-package projectile
+  :ensure t
+  :diminish projectile-mode
+  :config
+  (setq projectile-enable-caching t
+        projectile-completion-system 'helm
+        projectile-switch-project-action 'helm-projectile)
+  (projectile-global-mode))
+
+(use-package helm-projectile
+  :ensure t
+  :commands (helm-projectile)
+  :config (helm-projectile-on))
+
+(use-package helm-descbinds
+  :ensure t
+  :config (helm-descbinds-mode))
+
+
+(use-package helm-gitignore)
+  :ensure t
+
+#+END_SRC
+  
+
+* Stuff
+#+BEGIN_SRC emacs-lisp
+;; default truncate lines
+(setq-default truncate-lines t)
+
+;; disable bell
+(setq ring-bell-function 'ignore
+      visible-bell t)
+(setq system-uses-terminfo nil)
+
+;;https://github.com/andschwa/.emacs.d/blob/master/init.el
+#+END_SRC
+
+* Themes
+#+BEGIN_SRC emacs-lisp
+
+  (load-theme 'leuven t)
+
+#+END_SRC
+
+* Flycheck
+#+BEGIN_SRC emacs-lisp
+
+    (use-package flycheck
+    :ensure t
+    :init
+    (global-flycheck-mode t))
+
+#+END_SRC
+
+* Python
+#+BEGIN_SRC emacs-lisp
+
+    (use-package elpy
+    :ensure t
+    :config
+    (elpy-enable)
+    (setq elpy-rpc-backend "jedi") 
+    
+    )
+
+
+
+;;    (use-package jedi
+;;    :ensure t
+;;    :init
+ ;;   (add-hook 'python-mode-hook 'jedi:setup)
+ ;;   (add-hook 'python-mode-hook 'jedi:ac-setup))
+    
+
+#+END_SRC
+* Yasnippet
+  #+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+    :ensure t
+    :init
+    (yas-global-mode 1))
+
+    (use-package auto-package-update
+    :ensure t
+    :config
+    (setq auto-package-update-delete-old-versions t
+	    auto-package-update-interval 4)
+    (auto-package-update-maybe))
+
+    (setq jedi-config:use-system-python t)
+(add-to-list 'default-frame-alist '(internal-border-width . 7))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(use-package golden-ratio
+  :ensure t
+  :diminish golden-ratio-mode
+  :init
+  (golden-ratio-mode 1))
+(set-frame-font "Monaco-14" nil t)
+
+  #+END_SRC
+
+  
